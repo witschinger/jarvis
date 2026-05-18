@@ -72,10 +72,14 @@ def claude_name_from_file(path: Path) -> str | None:
 
 
 def collect_existing_aliases(knowledge_dir: Path) -> set[str]:
+    """Collect aliases from the whole Claude Code Memory tree (recursive),
+    not just Knowledge/. Top-level curated files like llm-council-de.md
+    should also count as existing Obsidian versions of a Claude memory."""
     aliases: set[str] = set()
-    if not knowledge_dir.exists():
+    search_root = knowledge_dir.parent if knowledge_dir.exists() else knowledge_dir
+    if not search_root.exists():
         return aliases
-    for md in knowledge_dir.glob("*.md"):
+    for md in search_root.rglob("*.md"):
         text = md.read_text(encoding="utf-8")
         # find aliases block in frontmatter
         m = re.search(r"^---\n(.*?)\n---\n", text, re.DOTALL)
