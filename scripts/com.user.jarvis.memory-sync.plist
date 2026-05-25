@@ -11,6 +11,8 @@
         <string>-arm64</string>
         <string>/Library/Frameworks/Python.framework/Versions/3.12/bin/python3</string>
         <string>/Users/stephan.merk/Python_Code/jarvis/scripts/sync-memory-to-obsidian.py</string>
+        <string>--delay-seconds</string>
+        <string>0</string>
     </array>
 
     <key>WorkingDirectory</key>
