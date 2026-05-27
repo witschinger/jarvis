@@ -1,5 +1,13 @@
 {
   "permissions": {
-    "allow": []
+    "allow": [
+      "Bash(ps -p 78676 -o pid,command)",
+      "Read(//Users/stephan.merk/.claude/projects/**)",
+      "Read(//Users/stephan.merk/.claude/**)",
+      "Bash(launchctl kickstart *)",
+      "Read(//Users/stephan.merk/Library/Logs/**)",
+      "Bash(/usr/bin/env python3 *)",
+      "Bash(brew list *)"
+    ]
   }
 }
