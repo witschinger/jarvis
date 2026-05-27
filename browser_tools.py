@@ -4,6 +4,7 @@ Web search via DuckDuckGo Lite, page visits via Playwright, URL opening.
 """
 
 import re
+import sys
 import webbrowser
 import subprocess
 from urllib.parse import unquote, parse_qs, urlparse
@@ -15,16 +16,27 @@ _context = None
 
 
 def _bring_chromium_to_front():
-    """Bring the Playwright Chromium window to the foreground on Windows."""
+    """Bring the Playwright Chromium window to the foreground."""
     try:
-        subprocess.run([
-            "powershell", "-Command",
-            '(Get-Process -Name "chromium","chrome" -ErrorAction SilentlyContinue | '
-            'Where-Object { $_.MainWindowHandle -ne 0 } | Select-Object -Last 1).MainWindowHandle | '
-            'ForEach-Object { Add-Type "using System; using System.Runtime.InteropServices; '
-            'public class W { [DllImport(\\\"user32.dll\\\")] public static extern bool SetForegroundWindow(IntPtr h); }"; '
-            '[W]::SetForegroundWindow($_) }'
-        ], capture_output=True, timeout=3)
+        if sys.platform == "darwin":
+            subprocess.run(
+                ["osascript", "-e", 'tell application "Chromium" to activate'],
+                capture_output=True, timeout=3,
+            )
+        elif sys.platform.startswith("win"):
+            subprocess.run([
+                "powershell", "-Command",
+                '(Get-Process -Name "chromium","chrome" -ErrorAction SilentlyContinue | '
+                'Where-Object { $_.MainWindowHandle -ne 0 } | Select-Object -Last 1).MainWindowHandle | '
+                'ForEach-Object { Add-Type "using System; using System.Runtime.InteropServices; '
+                'public class W { [DllImport(\\\"user32.dll\\\")] public static extern bool SetForegroundWindow(IntPtr h); }"; '
+                '[W]::SetForegroundWindow($_) }'
+            ], capture_output=True, timeout=3)
+        else:
+            subprocess.run(
+                ["wmctrl", "-a", "Chromium"],
+                capture_output=True, timeout=3,
+            )
     except Exception:
         pass
 

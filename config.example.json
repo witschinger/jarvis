@@ -4,10 +4,18 @@
   "elevenlabs_voice_id": "YOUR_VOICE_ID",
   "user_name": "YOUR_NAME",
   "user_address": "Sir",
+  "user_role": "Tech-Profi",
   "city": "YOUR_CITY",
-  "workspace_path": "C:\\Users\\YOUR_USER\\Desktop\\jarvis_template",
+  "workspace_path": "/Users/YOUR_USER/Python_Code/jarvis",
   "spotify_track": "spotify:track:YOUR_TRACK_ID",
   "browser_url": "https://your-website.com",
-  "obsidian_inbox_path": "C:\\Users\\YOUR_USER\\path\\to\\obsidian\\inbox",
-  "apps": ["obsidian://open"]
+  "obsidian_inbox_path": "/Users/YOUR_USER/path/to/obsidian/inbox",
+  "apps": ["obsidian://open"],
+  "asana_pat": "1/PASTE_YOUR_PAT",
+  "asana_workspace_gid": "",
+  "asana_default_project_gid": "",
+  "asana_webhook_secret_file": "/Users/YOUR_USER/Python_Code/jarvis/.asana_webhook_secret",
+  "worldmonitor_api_key": "wm_live_PASTE_HERE",
+  "obsidian_vault_path": "/Users/YOUR_USER/path/to/Obsidian/Vault",
+  "obsidian_daily_folder": "Daily Notes"
 }

@@ -194,6 +194,65 @@ WICHTIG: Pruefe den Prompt sorgfaeltig — "Julian" und "Sir" kommen an mehreren
 
 ---
 
+## macOS-Setup
+
+Dieses Repo wurde fuer macOS portiert. Die Windows-Anweisungen oben (winget, PowerShell, Task Scheduler) sind dort nicht relevant — stattdessen:
+
+### 1. Voraussetzungen
+- **macOS** mit Python 3.10+ (`python3 --version`)
+- **Google Chrome**
+- **Spotify Desktop App** (falls `spotify_track` genutzt wird)
+- Optional: VS Code mit `code` CLI (in VS Code: `Cmd+Shift+P` -> "Shell Command: Install 'code' command in PATH")
+
+### 2. Dependencies installieren
+```bash
+cd ~/Python_Code/jarvis
+python3 -m pip install --user -r requirements.txt
+python3 -m playwright install chromium
+```
+
+### 3. Config anlegen
+```bash
+cp config.example.json config.json   # falls nicht vorhanden
+```
+Dann `config.json` mit echten Werten fuellen (API Keys, `workspace_path` = absoluter Pfad zu diesem Repo, Voice ID, Stadt etc.).
+
+### 4. Jarvis starten
+```bash
+python3 server.py
+```
+Dann `http://localhost:8340` in Chrome oeffnen und einmal in die Seite klicken (Chrome Autoplay-Policy).
+
+### 5. Doppelklatschen-Trigger
+```bash
+python3 scripts/clap-trigger.py
+```
+Beim ersten Start fragt macOS nach Mikrofon-Berechtigung — erlauben.
+
+### 6. Autostart bei Login (launchd)
+Plist nach `~/Library/LaunchAgents` kopieren und laden:
+```bash
+cp scripts/com.user.jarvis.clap.plist ~/Library/LaunchAgents/
+launchctl load ~/Library/LaunchAgents/com.user.jarvis.clap.plist
+```
+Pfade in der plist anpassen, falls das Repo nicht unter `/Users/stephan.merk/Python_Code/jarvis` liegt. Stoppen: `launchctl unload ~/Library/LaunchAgents/com.user.jarvis.clap.plist`.
+
+### 7. Berechtigungen (System Settings -> Privacy & Security)
+- **Microphone** — fuer Terminal/Python (Klatscherkennung) und Chrome (Spracheingabe)
+- **Screen Recording** — fuer Python (`ImageGrab.grab()` in `screen_capture.py`)
+- **Accessibility** — fuer Terminal/Python, damit das Fenster-Snapping in `launch-session.sh` Fenster bewegen darf. Ohne diese Berechtigung startet alles trotzdem, nur das Snapping wird uebersprungen.
+
+### 8. Fehlerbehebung (macOS)
+| Problem | Loesung |
+|---|---|
+| Server-Port 8340 belegt | `lsof -ti tcp:8340 \| xargs kill` |
+| Klatschen wird nicht erkannt | Mikrofon-Berechtigung pruefen, ggf. `THRESHOLD` in `clap-trigger.py` senken |
+| Fenster snappen nicht | Accessibility-Berechtigung erteilen |
+| `code` Befehl nicht gefunden | In VS Code: `Cmd+Shift+P` -> "Shell Command: Install 'code' command in PATH" |
+| Screenshot leer / Permission-Error | Screen Recording fuer Python erlauben |
+
+---
+
 ## Credits
 
 Template von Julian — [Skool Community](https://skool.com/ki-automatisierung)
